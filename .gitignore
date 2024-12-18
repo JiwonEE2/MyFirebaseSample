@@ -10,6 +10,12 @@
 /Assets/Plugins/Android/**/*.dll
 /Assets/Plugins/iOS/**/*.dll
 
+# .bundle 파일 제외
+*.bundle
+
+# .so (Shared Object) 파일 제외
+*.so
+
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
