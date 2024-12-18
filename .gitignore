@@ -1,3 +1,15 @@
+# Firebase 관련 DLL 제외
+/Assets/Plugins/Firebase/*.dll
+/Assets/Plugins/Firebase/Editor/*.dll
+
+# 모든 Plugins 폴더의 DLL 파일 제외
+/Assets/Plugins/**/*.dll
+/Assets/Plugins/**/*.pdb
+
+# 특정 플랫폼별 플러그인 제외
+/Assets/Plugins/Android/**/*.dll
+/Assets/Plugins/iOS/**/*.dll
+
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
