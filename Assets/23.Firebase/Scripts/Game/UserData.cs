@@ -15,7 +15,7 @@ public class UserData
 		Archer
 	}
 
-	public string userId;
+	public string userId { get; set; }
 	public string userName;
 	public int level;
 	public int gold;
@@ -44,3 +44,12 @@ public class UserData
 		this.userClass = userClass;
 	}
 }
+
+// json 변환 시 변수명이 string으로 저장되기 때문에 용량차지함. 이렇게 줄일 수도 있다. 근데 언패킹?과정이 따로 더 필요하니 주의!
+//public class DatabasePacket
+//{
+//	// username
+//	public string aa;
+//	// level
+//	public int ab;
+//}

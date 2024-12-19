@@ -12,10 +12,28 @@ public class UIHome : UIPage
 	public Image profileImage;
 	public TextMeshProUGUI displayName;
 	public Button profileChangeButton;
+	public TextMeshProUGUI gold;
+	public Button addGoldButton;
+	public Button signOutButton;
 
 	private void Awake()
 	{
 		profileChangeButton.onClick.AddListener(ProfileChangeButtonClick);
+		addGoldButton.onClick.AddListener(AddGoldButtonClick);
+		signOutButton.onClick.AddListener(SignOutButtonClick);
+	}
+
+	private void SignOutButtonClick()
+	{
+		FirebaseManager.Instance.SignOut();
+		UIManager.Instance.PageOpen<UIMain>();
+	}
+
+	private void AddGoldButtonClick()
+	{
+		UserData data = FirebaseManager.Instance.CurrentUserData;
+		data.gold += 10;
+		FirebaseManager.Instance.UpdateUserData("gold", data.gold, (x) => { SetUserData(data); });
 	}
 
 	public void ProfileChangeButtonClick()
@@ -58,5 +76,10 @@ public class UIHome : UIPage
 		{
 			profileImage.sprite = null;
 		}
+	}
+
+	public void SetUserData(UserData userData)
+	{
+		gold.text = userData.gold.ToString();
 	}
 }

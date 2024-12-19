@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class FirebaseManager : MonoBehaviour
 	public FirebaseDatabase DB { get; private set; }
 
 	private DatabaseReference usersRef;
+
+	public UserData CurrentUserData { get; private set; }
 
 	private void Awake()
 	{
@@ -48,15 +51,22 @@ public class FirebaseManager : MonoBehaviour
 	}
 
 	// 회원 가입 함수
-	public async void Create(string email, string passwd, Action<FirebaseUser> callback = null)
+	public async void Create(string email, string passwd, Action<FirebaseUser, UserData> callback = null)
 	{
 		try
 		{
 			var result = await Auth.CreateUserWithEmailAndPasswordAsync(email, passwd);
 
-			// 회원의 데이터를 database에 생성
+			// 생성된 회원의 database reference를 설정
+			usersRef = DB.GetReference($"users/{result.User.UserId}");
 
-			callback?.Invoke(result.User);
+			// 회원의 데이터를 database에 생성
+			UserData userData = new UserData(result.User.UserId);
+			string userDataJson = JsonConvert.SerializeObject(userData);
+
+			await usersRef.SetRawJsonValueAsync(userDataJson);
+
+			callback?.Invoke(result.User, userData);
 		}
 		catch (FirebaseException e)
 		{
@@ -65,13 +75,26 @@ public class FirebaseManager : MonoBehaviour
 	}
 
 	// 로그인
-	public async void SignIn(string email, string passwd, Action<FirebaseUser> callback = null)
+	public async void SignIn(string email, string passwd, Action<FirebaseUser, UserData> callback = null)
 	{
 		try
 		{
 			var result = await Auth.SignInWithEmailAndPasswordAsync(email, passwd);
 
-			callback?.Invoke(result.User);
+			usersRef = DB.GetReference($"users/{result.User.UserId}");
+
+			DataSnapshot userDataValues = await usersRef.GetValueAsync();
+			UserData userData = null;
+			// DB에 경로가 존재하는 지 검사
+			if (userDataValues.Exists)
+			{
+				string json = userDataValues.GetRawJsonValue();
+				userData = JsonConvert.DeserializeObject<UserData>(json);
+			}
+
+			CurrentUserData = userData;
+
+			callback?.Invoke(result.User, userData);
 		}
 		catch (FirebaseException e)
 		{
@@ -91,5 +114,19 @@ public class FirebaseManager : MonoBehaviour
 		};
 		await Auth.CurrentUser.UpdateUserProfileAsync(profile);
 		callback?.Invoke(Auth.CurrentUser);
+	}
+
+	// database의 유저 데이터 수정
+	public async void UpdateUserData(string childName, object value, Action<object> callback = null)
+	{
+		DatabaseReference targetRef = usersRef.Child(childName);
+		await targetRef.SetValueAsync(value);
+
+		callback?.Invoke(value);
+	}
+
+	internal void SignOut()
+	{
+		Auth.SignOut();
 	}
 }

@@ -25,6 +25,11 @@ public class UISignIn : UIPage
 
 	private void SignInButtonClick()
 	{
-		FirebaseManager.Instance.SignIn(email.text, passwd.text, (user) => { UIManager.Instance.PageOpen<UIHome>().SetInfo(user); });
+		FirebaseManager.Instance.SignIn(email.text, passwd.text, (user, userData) =>
+		{
+			UIHome home = UIManager.Instance.PageOpen<UIHome>();
+			home.SetInfo(user);
+			home.SetUserData(userData);
+		});
 	}
 }

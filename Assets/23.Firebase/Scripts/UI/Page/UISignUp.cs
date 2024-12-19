@@ -36,9 +36,9 @@ public class UISignUp : UIPage
 		UIManager.Instance.PageOpen(GetType().Name);
 	}
 
-	private void CreateCallback(FirebaseUser user)
+	private void CreateCallback(FirebaseUser user, UserData userData)
 	{
-		UIManager.Instance.PopupOpen<UIDialogPopup>().SetPopup("회원가입 완료", "회원가입이 완료\n로그인해주세요");
+		UIManager.Instance.PopupOpen<UIDialogPopup>().SetPopup("회원가입 완료", "회원 가입 완료\n로그인 해주세요");
 	}
 
 	private void SignInButtonClick()
