@@ -14,6 +14,8 @@ public class FirebaseManager : MonoBehaviour
 	public FirebaseAuth Auth { get; private set; }
 	public FirebaseDatabase DB { get; private set; }
 
+	private DatabaseReference usersRef;
+
 	private void Awake()
 	{
 		Instance = this;
@@ -30,6 +32,13 @@ public class FirebaseManager : MonoBehaviour
 			App = FirebaseApp.DefaultInstance;
 			Auth = FirebaseAuth.DefaultInstance;
 			DB = FirebaseDatabase.DefaultInstance;
+
+			DataSnapshot dummyData = await DB.GetReference("users").Child("dummy").GetValueAsync();
+
+			if (dummyData.Exists)
+			{
+				print(dummyData.GetRawJsonValue());
+			}
 		}
 		// 초기화 실패
 		else
@@ -44,6 +53,8 @@ public class FirebaseManager : MonoBehaviour
 		try
 		{
 			var result = await Auth.CreateUserWithEmailAndPasswordAsync(email, passwd);
+
+			// 회원의 데이터를 database에 생성
 
 			callback?.Invoke(result.User);
 		}
@@ -64,7 +75,21 @@ public class FirebaseManager : MonoBehaviour
 		}
 		catch (FirebaseException e)
 		{
+			UIManager.Instance.PopupOpen<UIDialogPopup>().SetPopup("로그인 실패", "이메일 또는 비밀번호가 틀렸습니다");
 			Debug.LogError(e.Message);
 		}
+	}
+
+	// 유저 정보 수정
+	public async void UpdateUserProfile(string displayName, Action<FirebaseUser> callback = null)
+	{
+		// UserProfile 생성
+		UserProfile profile = new UserProfile()
+		{
+			DisplayName = displayName,
+			PhotoUrl = new Uri("https://picsum.photos/120"),
+		};
+		await Auth.CurrentUser.UpdateUserProfileAsync(profile);
+		callback?.Invoke(Auth.CurrentUser);
 	}
 }
