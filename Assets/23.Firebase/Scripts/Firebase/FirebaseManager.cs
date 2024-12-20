@@ -109,6 +109,11 @@ public class FirebaseManager : MonoBehaviour
 			onGameStart?.Invoke(currentRoom, true);
 			roomRef.Child("turn").ChildAdded += TurnAdded;
 		}
+		else if (state == 2)
+		{
+			// 게임 끝내기
+
+		}
 	}
 
 	private void TurnAdded(object sender, ChildChangedEventArgs e)
