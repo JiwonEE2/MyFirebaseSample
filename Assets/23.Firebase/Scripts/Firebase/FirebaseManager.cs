@@ -138,6 +138,7 @@ public class FirebaseManager : MonoBehaviour
 			CurrentUserData = userData;
 
 			callback?.Invoke(result.User, userData);
+			onLogin?.Invoke();
 		}
 		catch (FirebaseException e)
 		{
