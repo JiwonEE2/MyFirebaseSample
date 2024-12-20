@@ -17,12 +17,53 @@ public class FirebaseManager : MonoBehaviour
 
 	private DatabaseReference usersRef;
 
+	private DatabaseReference msgRef;
+
+	public event Action onLogin;
+
 	public UserData CurrentUserData { get; private set; }
 
 	private void Awake()
 	{
 		Instance = this;
 		DontDestroyOnLoad(gameObject);
+		onLogin += OnLogin;
+	}
+
+	private void OnLogin()
+	{
+		msgRef = DB.GetReference($"msg/{Auth.CurrentUser.UserId}");
+		msgRef.ChildAdded += OnMessageReceive;
+	}
+
+	// DatabaseReference.ChildAdded 이벤트에 등록할 이벤트 함수
+	private void OnMessageReceive(object sender, ChildChangedEventArgs args)
+	{
+		// 에러 없음
+		if (args.DatabaseError == null)
+		{
+			string rawJson = args.Snapshot.GetRawJsonValue();
+
+			Message message = JsonConvert.DeserializeObject<Message>(rawJson);
+			//print(rawJson);
+
+			var popup = UIManager.Instance.PopupOpen<UIDialogPopup>();
+
+			popup.SetPopup($"From.{message.sender}", $"{message.message}\n{message.GetSendTime()}");
+		}
+		// 에러 발생
+		else
+		{
+
+		}
+	}
+
+	public void MessageToTarget(string target, Message message)
+	{
+		DatabaseReference targetRef = DB.GetReference($"msg/{target}");
+		string messageJson = JsonConvert.SerializeObject(message);
+		targetRef.Child(message.sender + message.sendTime).SetRawJsonValueAsync(messageJson);
+
 	}
 
 	private async void Start()
@@ -67,6 +108,8 @@ public class FirebaseManager : MonoBehaviour
 			await usersRef.SetRawJsonValueAsync(userDataJson);
 
 			callback?.Invoke(result.User, userData);
+
+			onLogin?.Invoke();
 		}
 		catch (FirebaseException e)
 		{

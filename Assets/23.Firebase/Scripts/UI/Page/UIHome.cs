@@ -15,12 +15,40 @@ public class UIHome : UIPage
 	public TextMeshProUGUI gold;
 	public Button addGoldButton;
 	public Button signOutButton;
+	public Button messageButton;
 
 	private void Awake()
 	{
 		profileChangeButton.onClick.AddListener(ProfileChangeButtonClick);
 		addGoldButton.onClick.AddListener(AddGoldButtonClick);
 		signOutButton.onClick.AddListener(SignOutButtonClick);
+		messageButton.onClick.AddListener(MessageButtonClick);
+	}
+
+	string messageTarget;
+	private void MessageButtonClick()
+	{
+		var popup = UIManager.Instance.PopupOpen<UIInputFieldPopup>();
+		popup.SetPopup("메시지 보내기", "누구에게 메시지를 보내시겠습니까?", SetMessageTarget);
+	}
+
+	private void SetMessageTarget(string target)
+	{
+		messageTarget = target;
+		var popup = UIManager.Instance.PopupOpen<UIInputFieldPopup>();
+		popup.SetPopup($"To.{messageTarget}", "뭐라고 메시지를 보내시겠습니까?", MessageToTarget);
+	}
+
+	private void MessageToTarget(string messageText)
+	{
+		Message message = new Message()
+		{
+			sender = FirebaseManager.Instance.Auth.CurrentUser.UserId,
+			message = messageText,
+			sendTime = DateTime.Now.Ticks
+		};
+
+		FirebaseManager.Instance.MessageToTarget(messageTarget, message);
 	}
 
 	private void SignOutButtonClick()
