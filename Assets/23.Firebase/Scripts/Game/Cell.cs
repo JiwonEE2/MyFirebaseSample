@@ -8,9 +8,12 @@ public class Cell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 {
 	public string coordinate;
 
+	public Board board;
+
 	public void OnPointerClick(PED eventData)
 	{
 		print(coordinate);
+		board.SelectCell(this);
 	}
 
 	public void OnPointerEnter(PED eventData)

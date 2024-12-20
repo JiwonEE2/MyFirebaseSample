@@ -16,6 +16,8 @@ public class UIHome : UIPage
 	public Button addGoldButton;
 	public Button signOutButton;
 	public Button messageButton;
+	public Button inviteButton;
+	public Board gameBoard;
 
 	private void Awake()
 	{
@@ -23,6 +25,70 @@ public class UIHome : UIPage
 		addGoldButton.onClick.AddListener(AddGoldButtonClick);
 		signOutButton.onClick.AddListener(SignOutButtonClick);
 		messageButton.onClick.AddListener(MessageButtonClick);
+		inviteButton.onClick.AddListener(InviteButtonClick);
+
+		gameBoard.gameObject.SetActive(false);
+	}
+
+	private void Start()
+	{
+		FirebaseManager.Instance.onGameStart += GameStart;
+		FirebaseManager.Instance.onTurnProceed += ProcessTurn;
+	}
+
+	Room currentRoom;
+
+	public void GameStart(Room room, bool isHost)
+	{
+		currentRoom = room;
+		gameBoard.isHost = isHost;
+		gameBoard.gameObject.SetActive(true);
+	}
+
+	public void ProcessTurn(Turn turn)
+	{
+		// 새로운 턴 입력이 추가될 때마다 호출
+		gameBoard.turnCount++;
+
+		gameBoard.PlaceMark(turn.isHostTurn, turn.coordinate);
+
+		// 내 턴
+		if (turn.isHostTurn == gameBoard.isHost)
+		{
+
+		}
+		// 상대 턴
+		else
+		{
+
+		}
+	}
+
+	private void InviteButtonClick()
+	{
+		var popup = UIManager.Instance.PopupOpen<UIInputFieldPopup>();
+		popup.SetPopup("초대하기", "누구를 초대하시겠습니까?", InviteTarget);
+	}
+
+	private async void InviteTarget(string target)
+	{
+		Room room = new Room()
+		{
+			host = FirebaseManager.Instance.Auth.CurrentUser.UserId,
+			guest = target,
+			state = RoomState.Waiting,
+		};
+
+		await FirebaseManager.Instance.CreateRoom(room);
+
+		Message message = new Message()
+		{
+			type = MessageType.Invite,
+			sender = FirebaseManager.Instance.Auth.CurrentUser.UserId,
+			message = "",
+			sendTime = DateTime.Now.Ticks
+		};
+		await FirebaseManager.Instance.MessageToTarget(target, message);
 	}
 
 	string messageTarget;
@@ -43,6 +109,7 @@ public class UIHome : UIPage
 	{
 		Message message = new Message()
 		{
+			type = MessageType.Message,
 			sender = FirebaseManager.Instance.Auth.CurrentUser.UserId,
 			message = messageText,
 			sendTime = DateTime.Now.Ticks

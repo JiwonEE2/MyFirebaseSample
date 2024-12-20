@@ -7,6 +7,11 @@ public class Board : MonoBehaviour
 	public Cell[] cells;
 	public Dictionary<string, Cell> cellDictionary = new Dictionary<string, Cell>();
 
+	public GameObject blueMark;
+	public GameObject redMark;
+	public bool isHost;
+	public int turnCount;
+
 	private void Awake()
 	{
 		cells = GetComponentsInChildren<Cell>();
@@ -22,7 +27,26 @@ public class Board : MonoBehaviour
 
 		foreach (Cell cell in cells)
 		{
+			cell.board = this;
 			cellDictionary.Add(cell.coordinate, cell);
 		}
+	}
+
+	public void SelectCell(Cell cell)
+	{
+		Turn turn = new Turn()
+		{
+			isHostTurn = isHost,
+			coordinate = cell.coordinate,
+		};
+
+		FirebaseManager.Instance.SendTurn(turnCount, turn);
+	}
+
+	public void PlaceMark(bool isBlue, string coordinate)
+	{
+		GameObject prefab = isBlue ? blueMark : redMark;
+		Cell targetCell = cellDictionary[coordinate];
+		Instantiate(prefab, targetCell.transform, false);
 	}
 }
