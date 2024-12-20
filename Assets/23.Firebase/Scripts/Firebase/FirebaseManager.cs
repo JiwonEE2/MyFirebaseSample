@@ -172,5 +172,6 @@ public class FirebaseManager : MonoBehaviour
 	internal void SignOut()
 	{
 		Auth.SignOut();
+		msgRef.ChildAdded -= OnMessageReceive;
 	}
 }
