@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,14 +27,14 @@ public class UIManager : MonoBehaviour
 
 	public T PopupOpen<T>() where T : UIPopup
 	{
-		// ÆË¾÷ Ã£±â
+		// íŒì—… ì°¾ê¸°
 		T @return = popups.Find((popup) => popup is T) as T;
-		// Ã£´Â ÆË¾÷ÀÌ ÀÖÀ¸¸é
+		// ì°¾ëŠ” íŒì—…ì´ ìžˆìœ¼ë©´
 		if (@return != null)
 		{
-			// ÆË¾÷ È°¼ºÈ­
+			// íŒì—… í™œì„±í™”
 			@return.gameObject.SetActive(true);
-			// È°¼º ÆË¾÷ ½ºÅÃ¿¡ Ãß°¡
+			// í™œì„± íŒì—… ìŠ¤íƒì— ì¶”ê°€
 			openPopups.Push(@return);
 		}
 		return @return;
@@ -42,12 +42,12 @@ public class UIManager : MonoBehaviour
 
 	public void PopupClose()
 	{
-		// È°¼º ÆË¾÷ ½ºÅÃ¿¡ ÆË¾÷ÀÌ ÀÖÀ¸¸é
+		// í™œì„± íŒì—… ìŠ¤íƒì— íŒì—…ì´ ìžˆìœ¼ë©´
 		if (openPopups.Count > 0)
 		{
-			// ²¨³¿
+			// êº¼ëƒ„
 			UIPopup targetPopup = openPopups.Pop();
-			// ºñÈ°¼ºÈ­
+			// ë¹„í™œì„±í™”
 			targetPopup.gameObject.SetActive(false);
 		}
 	}

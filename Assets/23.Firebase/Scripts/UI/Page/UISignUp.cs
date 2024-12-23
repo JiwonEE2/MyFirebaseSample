@@ -1,4 +1,4 @@
-using Firebase.Auth;
+ï»¿using Firebase.Auth;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -23,7 +23,7 @@ public class UISignUp : UIPage
 	{
 		if (passwd.text.Length < 6)
 		{
-			UIManager.Instance.PopupOpen<UIDialogPopup>().SetPopup("¾Ë¸²", "ºñ¹Ğ¹øÈ£´Â 6±ÛÀÚ ÀÌ»ó");
+			UIManager.Instance.PopupOpen<UIDialogPopup>().SetPopup("ì•Œë¦¼", "ë¹„ë°€ë²ˆí˜¸ëŠ” 6ê¸€ì ì´ìƒ");
 		}
 		else
 		{
@@ -38,7 +38,7 @@ public class UISignUp : UIPage
 
 	private void CreateCallback(FirebaseUser user, UserData userData)
 	{
-		UIManager.Instance.PopupOpen<UIDialogPopup>().SetPopup("È¸¿ø°¡ÀÔ ¿Ï·á", "È¸¿ø °¡ÀÔ ¿Ï·á\n·Î±×ÀÎ ÇØÁÖ¼¼¿ä");
+		UIManager.Instance.PopupOpen<UIDialogPopup>().SetPopup("íšŒì›ê°€ì… ì™„ë£Œ", "íšŒì› ê°€ì… ì™„ë£Œ\në¡œê·¸ì¸ í•´ì£¼ì„¸ìš”");
 	}
 
 	private void SignInButtonClick()

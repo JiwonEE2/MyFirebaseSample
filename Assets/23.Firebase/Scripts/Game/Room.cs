@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +10,7 @@ public enum RoomState
 	Finished
 }
 
-// JsonÀ¸·Î Á÷·ÄÈ­ÇÏ·Á°í ¸¸µê
+// Jsonìœ¼ë¡œ ì§ë ¬í™”í•˜ë ¤ê³  ë§Œë“¦
 [Serializable]
 public class Room
 {

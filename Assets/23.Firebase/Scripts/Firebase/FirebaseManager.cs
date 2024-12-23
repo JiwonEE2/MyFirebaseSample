@@ -1,4 +1,4 @@
-using Firebase;
+ï»¿using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using System;
@@ -47,10 +47,10 @@ public class FirebaseManager : MonoBehaviour
 		msgRef.ChildAdded += OnMessageReceive;
 	}
 
-	// DatabaseReference.ChildAdded ÀÌº¥Æ®¿¡ µî·ÏÇÒ ÀÌº¥Æ® ÇÔ¼ö
+	// DatabaseReference.ChildAdded ì´ë²¤íŠ¸ì— ë“±ë¡í•  ì´ë²¤íŠ¸ í•¨ìˆ˜
 	private void OnMessageReceive(object sender, ChildChangedEventArgs args)
 	{
-		// ¿¡·¯ ¾øÀ½
+		// ì—ëŸ¬ ì—†ìŒ
 		if (args.DatabaseError == null)
 		{
 			string rawJson = args.Snapshot.GetRawJsonValue();
@@ -69,13 +69,13 @@ public class FirebaseManager : MonoBehaviour
 				else if (message.type == MessageType.Invite)
 				{
 					var popup = UIManager.Instance.PopupOpen<UITwoButtonPopup>();
-					popup.SetPopup("ÃÊ´ëÀå", $"{message.sender}´ÔÀÇ °ÔÀÓ¿¡ Âü°¡ÇÏ½Ã°Ú½À´Ï±î?", ok => { if (ok) { JoinRoom(message.sender); } });
+					popup.SetPopup("ì´ˆëŒ€ì¥", $"{message.sender}ë‹˜ì˜ ê²Œì„ì— ì°¸ê°€í•˜ì‹œê² ìŠµë‹ˆê¹Œ?", ok => { if (ok) { JoinRoom(message.sender); } });
 				}
 
 				args.Snapshot.Reference.Child("isNew").SetValueAsync(false);
 			}
 		}
-		// ¿¡·¯ ¹ß»ı
+		// ì—ëŸ¬ ë°œìƒ
 		else
 		{
 
@@ -105,13 +105,13 @@ public class FirebaseManager : MonoBehaviour
 
 		if (state == 1)
 		{
-			// °ÔÀÓ ½ºÅ¸Æ®
+			// ê²Œì„ ìŠ¤íƒ€íŠ¸
 			onGameStart?.Invoke(currentRoom, true);
 			roomRef.Child("turn").ChildAdded += TurnAdded;
 		}
 		else if (state == 2)
 		{
-			// °ÔÀÓ ³¡³»±â
+			// ê²Œì„ ëë‚´ê¸°
 
 		}
 	}
@@ -161,9 +161,9 @@ public class FirebaseManager : MonoBehaviour
 
 	private async void Start()
 	{
-		// Check firebase initialization. ºñµ¿±â(Async) ÇÔ¼öÀÌ¹Ç·Î ¿Ï·áµÉ ¶§±îÁö ´ë±â
+		// Check firebase initialization. ë¹„ë™ê¸°(Async) í•¨ìˆ˜ì´ë¯€ë¡œ ì™„ë£Œë  ë•Œê¹Œì§€ ëŒ€ê¸°
 		DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
-		// ÃÊ±âÈ­ ¼º°ø
+		// ì´ˆê¸°í™” ì„±ê³µ
 		if (status == DependencyStatus.Available)
 		{
 			App = FirebaseApp.DefaultInstance;
@@ -177,24 +177,24 @@ public class FirebaseManager : MonoBehaviour
 				print(dummyData.GetRawJsonValue());
 			}
 		}
-		// ÃÊ±âÈ­ ½ÇÆĞ
+		// ì´ˆê¸°í™” ì‹¤íŒ¨
 		else
 		{
-			Debug.LogWarning($"ÆÄÀÌ¾îº£ÀÌ½º ÃÊ±âÈ­ ½ÇÆĞ: {status}");
+			Debug.LogWarning($"íŒŒì´ì–´ë² ì´ìŠ¤ ì´ˆê¸°í™” ì‹¤íŒ¨: {status}");
 		}
 	}
 
-	// È¸¿ø °¡ÀÔ ÇÔ¼ö
+	// íšŒì› ê°€ì… í•¨ìˆ˜
 	public async void Create(string email, string passwd, Action<FirebaseUser, UserData> callback = null)
 	{
 		try
 		{
 			var result = await Auth.CreateUserWithEmailAndPasswordAsync(email, passwd);
 
-			// »ı¼ºµÈ È¸¿øÀÇ database reference¸¦ ¼³Á¤
+			// ìƒì„±ëœ íšŒì›ì˜ database referenceë¥¼ ì„¤ì •
 			usersRef = DB.GetReference($"users/{result.User.UserId}");
 
-			// È¸¿øÀÇ µ¥ÀÌÅÍ¸¦ database¿¡ »ı¼º
+			// íšŒì›ì˜ ë°ì´í„°ë¥¼ databaseì— ìƒì„±
 			UserData userData = new UserData(result.User.UserId);
 			string userDataJson = JsonConvert.SerializeObject(userData);
 
@@ -210,7 +210,7 @@ public class FirebaseManager : MonoBehaviour
 		}
 	}
 
-	// ·Î±×ÀÎ
+	// ë¡œê·¸ì¸
 	public async void SignIn(string email, string passwd, Action<FirebaseUser, UserData> callback = null)
 	{
 		try
@@ -221,7 +221,7 @@ public class FirebaseManager : MonoBehaviour
 
 			DataSnapshot userDataValues = await usersRef.GetValueAsync();
 			UserData userData = null;
-			// DB¿¡ °æ·Î°¡ Á¸ÀçÇÏ´Â Áö °Ë»ç
+			// DBì— ê²½ë¡œê°€ ì¡´ì¬í•˜ëŠ” ì§€ ê²€ì‚¬
 			if (userDataValues.Exists)
 			{
 				string json = userDataValues.GetRawJsonValue();
@@ -235,15 +235,15 @@ public class FirebaseManager : MonoBehaviour
 		}
 		catch (FirebaseException e)
 		{
-			UIManager.Instance.PopupOpen<UIDialogPopup>().SetPopup("·Î±×ÀÎ ½ÇÆĞ", "ÀÌ¸ŞÀÏ ¶Ç´Â ºñ¹Ğ¹øÈ£°¡ Æ²·È½À´Ï´Ù");
+			UIManager.Instance.PopupOpen<UIDialogPopup>().SetPopup("ë¡œê·¸ì¸ ì‹¤íŒ¨", "ì´ë©”ì¼ ë˜ëŠ” ë¹„ë°€ë²ˆí˜¸ê°€ í‹€ë ¸ìŠµë‹ˆë‹¤");
 			Debug.LogError(e.Message);
 		}
 	}
 
-	// À¯Àú Á¤º¸ ¼öÁ¤
+	// ìœ ì € ì •ë³´ ìˆ˜ì •
 	public async void UpdateUserProfile(string displayName, Action<FirebaseUser> callback = null)
 	{
-		// UserProfile »ı¼º
+		// UserProfile ìƒì„±
 		UserProfile profile = new UserProfile()
 		{
 			DisplayName = displayName,
@@ -253,7 +253,7 @@ public class FirebaseManager : MonoBehaviour
 		callback?.Invoke(Auth.CurrentUser);
 	}
 
-	// databaseÀÇ À¯Àú µ¥ÀÌÅÍ ¼öÁ¤
+	// databaseì˜ ìœ ì € ë°ì´í„° ìˆ˜ì •
 	public async void UpdateUserData(string childName, object value, Action<object> callback = null)
 	{
 		DatabaseReference targetRef = usersRef.Child(childName);

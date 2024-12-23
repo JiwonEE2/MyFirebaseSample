@@ -1,9 +1,9 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// jsonÀ¸·Î º¯°æÇÒ °ÍÀÌ±â ¶§¹®¿¡ Á÷·ÄÈ­
+// jsonìœ¼ë¡œ ë³€ê²½í•  ê²ƒì´ê¸° ë•Œë¬¸ì— ì§ë ¬í™”
 [Serializable]
 public class UserData
 {
@@ -21,14 +21,14 @@ public class UserData
 	public int gold;
 	public UserClass userClass;
 
-	// ±âº» »ı¼ºÀÚ
+	// ê¸°ë³¸ ìƒì„±ì
 	public UserData() { }
 
-	// È¸¿ø°¡ÀÔÇÒ ¶§ »ç¿ëÇÒ »ı¼ºÀÚ
+	// íšŒì›ê°€ì…í•  ë•Œ ì‚¬ìš©í•  ìƒì„±ì
 	public UserData(string userId)
 	{
 		this.userId = userId;
-		userName = "¹«¸íÀÇ Àü»ç";
+		userName = "ë¬´ëª…ì˜ ì „ì‚¬";
 		level = 1;
 		gold = 0;
 		userClass = UserClass.Warrior;
@@ -36,7 +36,7 @@ public class UserData
 
 	public UserData(string userId, string userName, int level, int gold, UserClass userClass)
 	{
-		// ·Î±×ÀÎÇÒ ¶§ »ç¿ëÇÒ »ı¼ºÀÚ
+		// ë¡œê·¸ì¸í•  ë•Œ ì‚¬ìš©í•  ìƒì„±ì
 		this.userId = userId;
 		this.userName = userName;
 		this.level = level;
@@ -45,7 +45,7 @@ public class UserData
 	}
 }
 
-// json º¯È¯ ½Ã º¯¼ö¸íÀÌ stringÀ¸·Î ÀúÀåµÇ±â ¶§¹®¿¡ ¿ë·®Â÷ÁöÇÔ. ÀÌ·¸°Ô ÁÙÀÏ ¼öµµ ÀÖ´Ù. ±Ùµ¥ ¾ğÆĞÅ·?°úÁ¤ÀÌ µû·Î ´õ ÇÊ¿äÇÏ´Ï ÁÖÀÇ!
+// json ë³€í™˜ ì‹œ ë³€ìˆ˜ëª…ì´ stringìœ¼ë¡œ ì €ì¥ë˜ê¸° ë•Œë¬¸ì— ìš©ëŸ‰ì°¨ì§€í•¨. ì´ë ‡ê²Œ ì¤„ì¼ ìˆ˜ë„ ìˆë‹¤. ê·¼ë° ì–¸íŒ¨í‚¹?ê³¼ì •ì´ ë”°ë¡œ ë” í•„ìš”í•˜ë‹ˆ ì£¼ì˜!
 //public class DatabasePacket
 //{
 //	// username

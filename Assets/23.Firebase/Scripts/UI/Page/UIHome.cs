@@ -1,4 +1,4 @@
-using Firebase.Auth;
+ï»¿using Firebase.Auth;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,17 +47,17 @@ public class UIHome : UIPage
 
 	public void ProcessTurn(Turn turn)
 	{
-		// »õ·Î¿î ÅÏ ÀÔ·ÂÀÌ Ãß°¡µÉ ¶§¸¶´Ù È£Ãâ
+		// ìƒˆë¡œìš´ í„´ ì…ë ¥ì´ ì¶”ê°€ë  ë•Œë§ˆë‹¤ í˜¸ì¶œ
 		gameBoard.turnCount++;
 
 		gameBoard.PlaceMark(turn.isHostTurn, turn.coordinate);
 
-		// ³» ÅÏ
+		// ë‚´ í„´
 		if (turn.isHostTurn == gameBoard.isHost)
 		{
 
 		}
-		// »ó´ë ÅÏ
+		// ìƒëŒ€ í„´
 		else
 		{
 
@@ -67,7 +67,7 @@ public class UIHome : UIPage
 	private void InviteButtonClick()
 	{
 		var popup = UIManager.Instance.PopupOpen<UIInputFieldPopup>();
-		popup.SetPopup("ÃÊ´ëÇÏ±â", "´©±¸¸¦ ÃÊ´ëÇÏ½Ã°Ú½À´Ï±î?", InviteTarget);
+		popup.SetPopup("ì´ˆëŒ€í•˜ê¸°", "ëˆ„êµ¬ë¥¼ ì´ˆëŒ€í•˜ì‹œê² ìŠµë‹ˆê¹Œ?", InviteTarget);
 	}
 
 	private async void InviteTarget(string target)
@@ -95,14 +95,14 @@ public class UIHome : UIPage
 	private void MessageButtonClick()
 	{
 		var popup = UIManager.Instance.PopupOpen<UIInputFieldPopup>();
-		popup.SetPopup("¸Ş½ÃÁö º¸³»±â", "´©±¸¿¡°Ô ¸Ş½ÃÁö¸¦ º¸³»½Ã°Ú½À´Ï±î?", SetMessageTarget);
+		popup.SetPopup("ë©”ì‹œì§€ ë³´ë‚´ê¸°", "ëˆ„êµ¬ì—ê²Œ ë©”ì‹œì§€ë¥¼ ë³´ë‚´ì‹œê² ìŠµë‹ˆê¹Œ?", SetMessageTarget);
 	}
 
 	private void SetMessageTarget(string target)
 	{
 		messageTarget = target;
 		var popup = UIManager.Instance.PopupOpen<UIInputFieldPopup>();
-		popup.SetPopup($"To.{messageTarget}", "¹¹¶ó°í ¸Ş½ÃÁö¸¦ º¸³»½Ã°Ú½À´Ï±î?", MessageToTarget);
+		popup.SetPopup($"To.{messageTarget}", "ë­ë¼ê³  ë©”ì‹œì§€ë¥¼ ë³´ë‚´ì‹œê² ìŠµë‹ˆê¹Œ?", MessageToTarget);
 	}
 
 	private void MessageToTarget(string messageText)
@@ -133,7 +133,7 @@ public class UIHome : UIPage
 
 	public void ProfileChangeButtonClick()
 	{
-		UIManager.Instance.PopupOpen<UIInputFieldPopup>().SetPopup("´Ğ³×ÀÓ º¯°æ", "º¯°æÇÒ ´Ğ³×ÀÓ ÀÔ·Â", ProfileChangeCallback);
+		UIManager.Instance.PopupOpen<UIInputFieldPopup>().SetPopup("ë‹‰ë„¤ì„ ë³€ê²½", "ë³€ê²½í•  ë‹‰ë„¤ì„ ì…ë ¥", ProfileChangeCallback);
 	}
 
 	private void ProfileChangeCallback(string newName)
